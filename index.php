@@ -12,6 +12,9 @@
     body {
       width : 80%; margin: 10% auto
     }
+    button {
+      background-color: red; color: white; border: none
+    }
   </style>
 </head>
 <body>
@@ -29,7 +32,10 @@
     ?>
 
     <?php foreach ($komens as $komen): ?>
-      <p><?=$komen['komentar']?></p>
+      <p id="parafkomen_<?=$komen['id']?>">
+        <?=$komen['komentar']?>
+        <button type="button" class="hapus_komen" data-id="<?=$komen['id']?>">Hapus</button>
+      </p>
     <?php endforeach; ?>
   </div>
 
@@ -41,10 +47,24 @@
       $.ajax({
         method: "POST",
         url: "storekomen.php",
-        data: { isi_komen: isi },
+        data: { isi_komen: isi, type: 'create' },
         success: function(data) {
           $('#textarea_komen').val('')
           $('#komen_wrapper').append(data)
+        }
+      })
+    });
+    $('.hapus_komen').click(function() {
+      var id = $(this).attr('data-id')
+
+      $.ajax({
+        method: "POST",
+        url: "storekomen.php",
+        data: { id_komen: id, type: 'delete' },
+        success: function(data) {
+          if (data == 1) {
+            $('#parafkomen_'+id).fadeOut()
+          }
         }
       })
     });
