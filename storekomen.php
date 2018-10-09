@@ -8,7 +8,10 @@ if ($_POST['type'] == 'create') {
 
   if (!empty($_POST['isi_komen'])) {
     if (mysqli_query($link, $query)) {
-      echo "<p>$komentar</p>";
+      $last_id = mysqli_insert_id($link);
+      echo "<p id='parafkomen_".$last_id."'>$komentar
+            <button type='button' class='hapus_komen' data-id='".$last_id."'>Hapus</button>
+            </p>";
     }
   } else {
     echo "<script>alert('komenmu kosong')</script>";

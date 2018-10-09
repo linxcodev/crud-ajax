@@ -54,7 +54,7 @@
         }
       })
     });
-    $('.hapus_komen').click(function() {
+    $(document).on('click', '.hapus_komen', function() {
       var id = $(this).attr('data-id')
 
       $.ajax({
