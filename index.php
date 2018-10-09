@@ -19,8 +19,24 @@
   <p>ini artikel</p>
 
   <textarea name="textarea_komen" id="textarea_komen" cols="30" rows="10"></textarea><br>
-  <input type="submit" name="submit_komen" id="submit_komen">
+  <input type="submit" name="submit_komen" id="submit_komen" value="Submit">
 
   <div id="komen_wrapper"></div>
+
+  <script src="jquery.min.js"></script>
+  <script>
+    $('#submit_komen').click(function() {
+      var isi = $('#textarea_komen').val()
+      
+      $.ajax({
+        method: "POST",
+        url: "storekomen.php",
+        data: { isi_komen: isi },
+        success: function(data) {
+          console.log(data)
+        }
+      })
+    });
+  </script>
 </body>
 </html>
