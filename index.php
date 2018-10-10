@@ -32,10 +32,11 @@
     ?>
 
     <?php foreach ($komens as $komen): ?>
-      <p id="parafkomen_<?=$komen['id']?>">
-        <?=$komen['komentar']?>
+      <div id="contain_<?=$komen['id']?>">
+        <p id="komen_<?=$komen['id']?>"><?=$komen['komentar']?></p>
         <button type="button" class="hapus_komen" data-id="<?=$komen['id']?>">Hapus</button>
-      </p>
+        <button type="button" class="edit_komen" data-id="<?=$komen['id']?>">Edit</button>
+      </div>
     <?php endforeach; ?>
   </div>
 
@@ -63,10 +64,32 @@
         data: { id_komen: id, type: 'delete' },
         success: function(data) {
           if (data == 1) {
-            $('#parafkomen_'+id).fadeOut()
+            $('#contain_'+id).fadeOut()
           }
         }
       })
+    });
+    $(document).on('click', '.edit_komen', function() {
+      var id = $(this).attr('data-id')
+      var txtKomen = $('#komen_'+id).text()
+      $('#komen_'+id).replaceWith("<textarea id='tr_"+id+"'>"+ txtKomen +"</textarea>")
+      $(this).replaceWith("<button id='save_"+id+"'>Save</button>")
+
+        $(document).on('click', '#save_'+id, function() {
+          var komenbr = $('#tr_'+id).val()
+          $.ajax({
+            method: "POST",
+            url: "storekomen.php",
+            data: { id_komen: id, type: 'update', komenbr: komenbr },
+            success: function(data) {
+            console.log(data);
+              if (data == 1) {
+                $('#tr_'+id).replaceWith("<p id='komen_"+id+"'>"+komenbr+"</p>")
+                $('#save_'+id).replaceWith("<button class='edit_komen' data-id='"+id+"'>Edit</button>")
+              }
+            }
+          })
+        })
     });
   </script>
 </body>
